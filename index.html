@@ -307,7 +307,20 @@
         要显示的页数 page , 每页的条目数 size
         select 查询列表 from 表名 limit (page-1)*size , size;
 </code></pre>
-<p>##查询的总结：<br>    执行的顺序：<br>    select 查询列表 ⑦<br>            from 表名1 别名 ①<br>            【连接类型 join】 表名2 别名 ②<br>            on 连接条件 ③<br>            where 查询条件 ④<br>            group by 分组列表 ⑤<br>            having 分组后筛选条件 ⑥<br>            order by 排序列表【asc/desc】 ⑧<br>            limit 【offset】,size; ⑨</p>
+<p>##查询的总结：</p>
+<pre><code>执行的顺序：
+select 查询列表 ⑦
+        from 表名1 别名 ①
+        【连接类型 join】 表名2 别名 ②
+        on 连接条件 ③
+        where 查询条件 ④
+        group by 分组列表 ⑤
+        having 分组后筛选条件 ⑥
+        order by 排序列表【asc/desc】 ⑧
+        limit 【offset】,size; ⑨
+
+     
+</code></pre>
 
       
 
