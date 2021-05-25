@@ -249,9 +249,9 @@
     a、 内连接：等值连接、非等值连接、自连接
     b、 外连接：左外连接、右外连接、全外连接
     c、 交叉连接
-
-一、 sql 92连接
-等值连接：
+</code></pre>
+<p>一、sql 92连接</p>
+<pre><code>等值连接：
 1.语法： select 查询字段 from 表1 别名,表2 别名 where 连接条件;
 2. 特点：
     1. 多表等值连接的结果为表的交集部分
@@ -260,9 +260,54 @@
     4. 两个表的顺序可以调换
     5. 可以添加筛选条件、分组条件、排序条件等
 
-非等值连接：
+ 非等值连接：
 1. 
 </code></pre>
+<p>二、sql 99连接</p>
+<pre><code>1.语法：select 查询字段 from 表1 别名 连接类型 join 表2 别名 on 连接条件
+2.连接类型： 
+        内连接★：inner
+        外连接：
+                左外★：left 【outer】
+                右外★：right 【outer】
+                全外：full 【outer】
+        交叉连接：cross
+</code></pre>
+<p> a、内连接</p>
+<pre><code>1. 语法：select 查询列表 from 表1 别名 inner into 表2 别名 on 连接条件
+2. 分类：等值连接、非等值连接、自连接
+3. 特点：
+    ① 可以添加分组、排序、筛选
+    ② inner可以省略不写
+    ③ 筛选条件放在 where 后面,连接条件放在 on 后面,提高分离性，便于阅读
+    ④ inner join 中的连接效果是一致的    
+</code></pre>
+<p> b、外连接</p>
+<pre><code>1. 应用场景：查询一个表有另一个表没有的记录
+2. 特点：
+    1. 外连接的查查询为主表中的所有记录
+            如果表中有和它匹配的值，则显示匹配的值
+            如果表中没有和他匹配的值，则显示null
+            外连接的查询结果 = 内连接的查询结果 + 主表中存在而从表中没有的值
+    2. 左外连接：left into 左边的是主表
+       右外连接：right into 右边的是主表
+    3. 全外连接 = 只有表1存在的内容 + 只有表2存在的内容
+</code></pre>
+<p> c、交叉连接</p>
+<h3 id="六、分页查询"><a href="#六、分页查询" class="headerlink" title="六、分页查询"></a>六、分页查询</h3><pre><code>1. 应用场景：当要显示的数据一页不全时，要求分页去提交sql请求
+2. 语法：select 查询列表 
+        from 表名1 
+        limit 【offset】,size;
+
+        offset：要显示条目的其实索引
+        size：要显示的条目数
+3. 特点：
+    ① limit语句一般放在查询语句的最后
+    ② 公式：
+        要显示的页数 page , 每页的条目数 size
+        select 查询列表 from 表名 limit (page-1)*size , size;
+</code></pre>
+<p>##查询的总结：<br>    执行的顺序：<br>    select 查询列表 ⑦<br>            from 表名1 别名 ①<br>            【连接类型 join】 表名2 别名 ②<br>            on 连接条件 ③<br>            where 查询条件 ④<br>            group by 分组列表 ⑤<br>            having 分组后筛选条件 ⑥<br>            order by 排序列表【asc/desc】 ⑧<br>            limit 【offset】,size; ⑨</p>
 
       
 
