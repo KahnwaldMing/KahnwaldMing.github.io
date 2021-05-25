@@ -16,7 +16,7 @@
 <meta property="og:description" content="DQL:Data Query Language(数据查询语言)一、 基础查询语法：    select 查询列表 from 表名; 说明：     1.查询列表可以是字段、函数、常量值、表达式     2. 查询出来的表格是一个虚拟的表格     3. 当字段和关键字重名时，可以使用英文下的单引号来区分       4. 在对语句操作之前要先选择好要操作的类库，可通过 USER + 类库的方式打开">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-22T07:30:01.000Z">
-<meta property="article:modified_time" content="2021-05-22T09:14:49.995Z">
+<meta property="article:modified_time" content="2021-05-25T08:49:25.839Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="数据库学习">
 <meta name="twitter:card" content="summary">
@@ -226,6 +226,43 @@
         IS NULL/IS NOT NULL:返回是空值/不是空值的字段
 
         &lt;=&gt;:完全等于
+</code></pre>
+<h3 id="三、-排序查询"><a href="#三、-排序查询" class="headerlink" title="三、 排序查询"></a>三、 排序查询</h3><p>语法：<br>    select 查询列表 from 表名 order by 排序列表 排序方式;</p>
+<pre><code>1. 排序方式：asc：升序
+           desc：降序
+2. 系统默认的方式为升序的排序方式
+3.  order by 一般放在查询语句的最后面
+4.  order by 子句后面可以加函数、单个字段、多个字段、表达式
+</code></pre>
+<h3 id="四、-分组查询"><a href="#四、-分组查询" class="headerlink" title="四、 分组查询"></a>四、 分组查询</h3><p>语法：<br>    select 分组函数,分组的列 from 表名 group by 分组的列表</p>
+<ol>
+<li>含义：将字段值按照一个或者多个字段进行分组,字段值相等的为一组</li>
+<li>分组的两类筛选条件：</li>
+</ol>
+<p>|    数据源| 位置|关键字<br>    :–:|<br>分组前筛选|原始表|group by 之前|where<br>分组后筛选|分组后的结果集|group by 之后|having</p>
+<h3 id="五、-连接查询"><a href="#五、-连接查询" class="headerlink" title="五、 连接查询"></a>五、 连接查询</h3><pre><code>1. 含义：当查询的字段来自于多个表时,运用连接查询，又称为多表查询
+2. 连接的查询的重点是添加合适的连接条件
+3. 分类：
+    ①按年代分类
+    a、sql 92标准：仅仅支持外连接
+    b、sql 99标准：支持内连接，外连接，交叉连接
+    ②按功能分类
+    a、 内连接：等值连接、非等值连接、自连接
+    b、 外连接：左外连接、右外连接、全外连接
+    c、 交叉连接
+
+一、 sql 92连接
+等值连接：
+1.语法： select 查询字段 from 表1 别名,表2 别名 where 连接条件;
+2. 特点：
+    1. 多表等值连接的结果为表的交集部分
+    2. n 表连接 需要设置 n-1 个连接条件
+    3. 一般需要为表起别名
+    4. 两个表的顺序可以调换
+    5. 可以添加筛选条件、分组条件、排序条件等
+
+非等值连接：
+1. 
 </code></pre>
 
       
