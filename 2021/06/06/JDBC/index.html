@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>JDBC | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#一、获取数据库连接##第一种方式  ① 建立驱动 Driver driver &#x3D; new com.mysql.jdbc.Driver();  ② 提供所需的连接(可以在驱动的README.txt中获取到) &#96;String url &#x3D; “jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;test”; ‘jdbc：mysql’:协议(jdbc为主协议,mysql为子协议) ‘localhost">
+  <meta name="description" content="##一、获取数据库连接###方式一  ① 获取Driver的实例化对象  Driver driver &#x3D; new com.mysql.jdbc.Driver();  ② 提供所需的连接(可以在驱动的README.txt中获取到)  String url &#x3D; &quot;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;test&quot;; ‘jdbc：mysql’:协议(jdbc为主协议,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JDBC">
 <meta property="og:url" content="http://example.com/2021/06/06/JDBC/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="#一、获取数据库连接##第一种方式  ① 建立驱动 Driver driver &#x3D; new com.mysql.jdbc.Driver();  ② 提供所需的连接(可以在驱动的README.txt中获取到) &#96;String url &#x3D; “jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;test”; ‘jdbc：mysql’:协议(jdbc为主协议,mysql为子协议) ‘localhost">
+<meta property="og:description" content="##一、获取数据库连接###方式一  ① 获取Driver的实例化对象  Driver driver &#x3D; new com.mysql.jdbc.Driver();  ② 提供所需的连接(可以在驱动的README.txt中获取到)  String url &#x3D; &quot;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;test&quot;; ‘jdbc：mysql’:协议(jdbc为主协议,">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-06T02:43:37.000Z">
-<meta property="article:modified_time" content="2021-06-06T03:05:20.941Z">
+<meta property="article:modified_time" content="2021-06-06T04:52:31.143Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="jdbc">
 <meta name="twitter:card" content="summary">
@@ -175,16 +175,60 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、获取数据库连接"><a href="#一、获取数据库连接" class="headerlink" title="#一、获取数据库连接"></a>#一、获取数据库连接</h2><p>##第一种方式</p>
-<p> ① 建立驱动<br> <code>Driver driver = new com.mysql.jdbc.Driver();</code></p>
-<p> ② 提供所需的连接(可以在驱动的README.txt中获取到)<br> `String url = “jdbc:mysql://localhost:3306/test”;</p>
+        <h2 id="一、获取数据库连接"><a href="#一、获取数据库连接" class="headerlink" title="##一、获取数据库连接"></a>##一、获取数据库连接</h2><p>###方式一</p>
+<p> ① 获取Driver的实例化对象</p>
+<p> <code>Driver driver = new com.mysql.jdbc.Driver();</code></p>
+<p> ② 提供所需的连接(可以在驱动的README.txt中获取到)</p>
+<p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code></p>
 <pre><code>‘jdbc：mysql’:协议(jdbc为主协议,mysql为子协议)
 ‘localhost’：IP地址
 ‘3306’：端口号
 ‘test’：连接的数据库的库名
 </code></pre>
-<p> ③ 提供用户名和密码<br> <code>Properties info = new Properties();</code><br> <code>info.setProperties(&quot;user&quot;,&quot;root&quot;);</code><br> <code>info.steProperties(&quot;password&quot;,&quot;1234&quot;);</code>  </p>
-<p> ④ 建立连接<br> <code>Conncetion conn = driver.getConnection(&quot;user&quot;,&quot;password&quot;);</code></p>
+<p> ③ 提供用户名和密码</p>
+<p> <code>Properties info = new Properties();</code><br> <code>info.setProperties(&quot;user&quot;,&quot;root&quot;);</code><br> <code>info.steProperties(&quot;password&quot;,&quot;1234&quot;);</code>  </p>
+<p> ④ 获取连接</p>
+<p> <code>Conncetion conn = driver.getConnection(&quot;user&quot;,&quot;password&quot;);</code></p>
+<p>###方式二</p>
+<pre><code>  第一种方式进行数据库的连接时，程序中出现了第三方的API。因此，在第二次迭代时，使用反射的方式实例化Driver对象,增加了程序的可移植性。
+</code></pre>
+<p>  ① 获取Driver的实例化对象</p>
+<p> <code>Class clazz = Class.forName(&quot;com.mysql.jdbc.driver&quot;);</code></p>
+<p>  ② 提供三个参数</p>
+<p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code></p>
+<p>  ③ 建立连接</p>
+<p> <code>Connection conn = Driver.connect(url,user,password);</code></p>
+<p>###方式三</p>
+<pre><code>使用DriverManager代替Driver
+</code></pre>
+<p>  ① 获取Driver的实例化对象  </p>
+<p> <code>Class clazz = Class.forName(&quot;com.mysql.jdbc.driver&quot;);</code><br> <code>Driver driver = (Driver) clazz.newInstance();</code></p>
+<p>  ② 提供三个参数</p>
+<p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code></p>
+<p>  ③ 获取连接</p>
+<p> <code>Connection conn = DriverManager.getConnection(url,user,password);</code></p>
+<p>###方式四</p>
+<pre><code>  相较于第三种方式,第四种省略了对于驱动的注册。在mysql的Driver中的静态代码块中，对驱动的注册进行了封装,不要再显式的声明了。
+</code></pre>
+<p>  ① 提供三个参数</p>
+<p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code>  </p>
+<p>  ② 加载Driver</p>
+<p> <code>Class.forName();</code></p>
+<p>  ③ 获取连接</p>
+<p> <code>Connection conn = DriverManager.getConnection(url,user,password);</code></p>
+<p>###方式五</p>
+<pre><code>  将数据库连接需要的四个基本信息写到配置文件中，通过读取配置文件的方式获取基本信息,这样如果需要修改代码,只需要修改配置文件,大大的提高了
+程序的灵活性和可配置性，降低了模块之的耦合性。
+</code></pre>
+<p>  ① 创建Properties的配置文件</p>
+<pre><code> 创建file文件(创建在当前的src下) 
+</code></pre>
+<p>  ② 读取Properties配置文件中的四个基本信息</p>
+<p> <code>InputStream is = ConnectionTest.class.getClassLoader.getResourceAsStream;</code><br> <code>Properties pro = new Properties();</code><br> <code>pro.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>  </p>
+<p>  ③ 加载驱动</p>
+<p> <code>froName(driverClass);</code></p>
+<p>  ④ 获取连接</p>
+<p> <code>Connection conn = DriverManage.getConnection(url,user,password);</code></p>
 
       
 
