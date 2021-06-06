@@ -152,12 +152,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-JDBC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/06/06/JDBC/">JDBC</a>
+    </h1>
+  
+
+        
+        <a href="/2021/06/06/JDBC/" class="archive-article-date">
+  	<time datetime="2021-06-06T02:43:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、获取数据库连接"><a href="#一、获取数据库连接" class="headerlink" title="#一、获取数据库连接"></a>#一、获取数据库连接</h2><p>##第一种方式</p>
+<p> ① 建立驱动<br> <code>Driver driver = new com.mysql.jdbc.Driver();</code></p>
+<p> ② 提供所需的连接(可以在驱动的README.txt中获取到)<br> `String url = “jdbc:mysql://localhost:3306/test”;</p>
+<pre><code>‘jdbc：mysql’:协议(jdbc为主协议,mysql为子协议)
+‘localhost’：IP地址
+‘3306’：端口号
+‘test’：连接的数据库的库名
+</code></pre>
+<p> ③ 提供用户名和密码<br> <code>Properties info = new Properties();</code><br> <code>info.setProperties(&quot;user&quot;,&quot;root&quot;);</code><br> <code>info.steProperties(&quot;password&quot;,&quot;1234&quot;);</code>  </p>
+<p> ④ 建立连接<br> <code>Conncetion conn = driver.getConnection(&quot;user&quot;,&quot;password&quot;);</code></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">jdbc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/06/06/JDBC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-随笔博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="DQL-Data-Query-Language-数据查询语言"><a href="#DQL-Data-Query-Language-数据查询语言" class="headerlink" title="DQL:Data Query Language(数据查询语言)"></a>DQL:Data Query Language(数据查询语言)</h3><h3 id="一、-基础查询"><a href="#一、-基础查询" class="headerlink" title="一、 基础查询"></a>一、 基础查询</h3><p>语法：<br>    select 查询列表 from 表名;</p>
+        <h1 id="MySql基础"><a href="#MySql基础" class="headerlink" title="MySql基础"></a>MySql基础</h1><h3 id="DQL-Data-Query-Language-数据查询语言"><a href="#DQL-Data-Query-Language-数据查询语言" class="headerlink" title="DQL:Data Query Language(数据查询语言)"></a>DQL:Data Query Language(数据查询语言)</h3><h3 id="一、-基础查询"><a href="#一、-基础查询" class="headerlink" title="一、 基础查询"></a>一、 基础查询</h3><p>语法：<br>    select 查询列表 from 表名;</p>
 <p>说明：<br>     1.查询列表可以是字段、函数、常量值、表达式<br>     2. 查询出来的表格是一个虚拟的表格<br>     3. 当字段和关键字重名时，可以使用英文下的单引号来区分<br>       4. 在对语句操作之前要先选择好要操作的类库，可通过 <code>USER + 类库</code>的方式打开类库<br>      5. 可以将该语句理解为 java中的 “System.out.print();”</p>
 <h4 id="1-查询单个字段"><a href="#1-查询单个字段" class="headerlink" title="1.查询单个字段"></a>1.查询单个字段</h4><p>例：<br>  <code>select  email from employees;</code></p>
 <h4 id="2-查询多个字段"><a href="#2-查询多个字段" class="headerlink" title="2.查询多个字段"></a>2.查询多个字段</h4><p>例：<br>  <code>select email , last_name from employees;</code></p>
@@ -318,6 +401,8 @@ select 查询列表 ⑦
         having 分组后筛选条件 ⑥
         order by 排序列表【asc/desc】 ⑧
         limit 【offset】,size; ⑨
+
+
 
      
 </code></pre>
@@ -602,6 +687,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">数据库学习</a>
