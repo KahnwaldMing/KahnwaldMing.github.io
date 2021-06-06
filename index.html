@@ -172,8 +172,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、获取数据库连接"><a href="#一、获取数据库连接" class="headerlink" title="##一、获取数据库连接"></a>##一、获取数据库连接</h2><p>###方式一</p>
-<p> ① 获取Driver的实例化对象</p>
+        <h2 id="一、获取数据库连接"><a href="#一、获取数据库连接" class="headerlink" title="一、获取数据库连接"></a>一、获取数据库连接</h2><hr>
+<h3 id="方式一"><a href="#方式一" class="headerlink" title="方式一"></a>方式一</h3><p> ① 获取Driver的实例化对象</p>
 <p> <code>Driver driver = new com.mysql.jdbc.Driver();</code></p>
 <p> ② 提供所需的连接(可以在驱动的README.txt中获取到)</p>
 <p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code></p>
@@ -186,8 +186,7 @@
 <p> <code>Properties info = new Properties();</code><br> <code>info.setProperties(&quot;user&quot;,&quot;root&quot;);</code><br> <code>info.steProperties(&quot;password&quot;,&quot;1234&quot;);</code>  </p>
 <p> ④ 获取连接</p>
 <p> <code>Conncetion conn = driver.getConnection(&quot;user&quot;,&quot;password&quot;);</code></p>
-<p>###方式二</p>
-<pre><code>  第一种方式进行数据库的连接时，程序中出现了第三方的API。因此，在第二次迭代时，使用反射的方式实例化Driver对象,增加了程序的可移植性。
+<h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><pre><code>  第一种方式进行数据库的连接时，程序中出现了第三方的API。因此，在第二次迭代时，使用反射的方式实例化Driver对象,增加了程序的可移植性。
 </code></pre>
 <p>  ① 获取Driver的实例化对象</p>
 <p> <code>Class clazz = Class.forName(&quot;com.mysql.jdbc.driver&quot;);</code></p>
@@ -195,8 +194,7 @@
 <p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code></p>
 <p>  ③ 建立连接</p>
 <p> <code>Connection conn = Driver.connect(url,user,password);</code></p>
-<p>###方式三</p>
-<pre><code>使用DriverManager代替Driver
+<h3 id="方式三"><a href="#方式三" class="headerlink" title="方式三"></a>方式三</h3><pre><code>使用DriverManager代替Driver
 </code></pre>
 <p>  ① 获取Driver的实例化对象  </p>
 <p> <code>Class clazz = Class.forName(&quot;com.mysql.jdbc.driver&quot;);</code><br> <code>Driver driver = (Driver) clazz.newInstance();</code></p>
@@ -204,8 +202,7 @@
 <p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code></p>
 <p>  ③ 获取连接</p>
 <p> <code>Connection conn = DriverManager.getConnection(url,user,password);</code></p>
-<p>###方式四</p>
-<pre><code>  相较于第三种方式,第四种省略了对于驱动的注册。在mysql的Driver中的静态代码块中，对驱动的注册进行了封装,不要再显式的声明了。
+<h3 id="方式四"><a href="#方式四" class="headerlink" title="方式四"></a>方式四</h3><pre><code>  相较于第三种方式,第四种省略了对于驱动的注册。在mysql的Driver中的静态代码块中，对驱动的注册进行了封装,不要再显式的声明了。
 </code></pre>
 <p>  ① 提供三个参数</p>
 <p> <code>String url = &quot;jdbc:mysql://localhost:3306/test&quot;;</code><br> <code>String user = &quot;root&quot;;</code><br> <code>String password = &quot;1234&quot;;</code>  </p>
@@ -213,8 +210,7 @@
 <p> <code>Class.forName();</code></p>
 <p>  ③ 获取连接</p>
 <p> <code>Connection conn = DriverManager.getConnection(url,user,password);</code></p>
-<p>###方式五</p>
-<pre><code>  将数据库连接需要的四个基本信息写到配置文件中，通过读取配置文件的方式获取基本信息,这样如果需要修改代码,只需要修改配置文件,大大的提高了
+<h3 id="方式五"><a href="#方式五" class="headerlink" title="方式五"></a>方式五</h3><pre><code>  将数据库连接需要的四个基本信息写到配置文件中，通过读取配置文件的方式获取基本信息,这样如果需要修改代码,只需要修改配置文件,大大的提高了
 程序的灵活性和可配置性，降低了模块之的耦合性。
 </code></pre>
 <p>  ① 创建Properties的配置文件</p>
