@@ -329,8 +329,72 @@
 <p>  ⑥ 执行操作  </p>
 <p> <code>ps.execute();</code></p>
 <p>  ⑦ 关闭资源  </p>
-<p> <code>ps.close();</code><br> <code>is.close();</code>
-  </p>
+<p> <code>ps.close();</code><br> <code>is.close();</code></p>
+<h3 id="3-JDBCUtils"><a href="#3-JDBCUtils" class="headerlink" title="3. JDBCUtils"></a>3. JDBCUtils</h3><pre><code>  为了简化操作，将获取连接和关闭资源封装在JDBCUtile下,便于操作。
+</code></pre>
+<p> 在JDBCUtils下提供两个静态方法:</p>
+<pre><code>//获取连接
+public static Connection getConnection()&#123;
+    
+    InputStream is = ClassLoader.getSystemClassLoader.getResourceAsStream(&quot;jdbc.properties&quot;);
+    Properties ps = new Properties();
+    ps.load(is);
+    String user = ps.getProperties(&quot;user&quot;);
+    String password = ps.getProperties(&quot;password&quot;);
+    String url = ps.getProperties(&quot;url&quot;);    
+    String driverClass = ps.getProperties(&quot;driverClass&quot;);
+    
+    forName(driverClass);
+    Connection conn = DriverManager.getConnection(url,user,password);
+
+
+&#125;
+
+
+//关闭资源
+public static void closeSource(Connection conn,PreparedStatement ps)&#123;
+    
+    try &#123;
+  
+        if(ps != null) &#123;
+            ps.close();
+        &#125;
+    &#125; catch (SQLException throwables) &#123;
+        throwables.printStackTrace();
+    &#125; finally &#123;
+    &#125;
+
+    try &#123;
+        if (conn != null) &#123;
+            conn.close();
+        &#125;
+    &#125; catch (SQLException throwables) &#123;
+        throwables.printStackTrace();
+    &#125;
+    
+&#125;
+</code></pre>
+<h3 id="4-update-方法"><a href="#4-update-方法" class="headerlink" title="4. update 方法"></a>4. update 方法</h3><pre><code>通过java操作数据库时，增删改的操作步骤一致，因此制订一套标准将其封装在update方法中
+
+
+public void update(String sql,Object ...args)&#123;
+    //1.获取连接
+    Connection conn = JDBCUtils.getConnection();
+    //2.预编译sql语句，返回PreparedStatement的实例
+    PreparedStatement ps = conn.prepareStatement(sql);
+    //3.填充占位符
+    for(i = 0;i&lt; args.length;i++)&#123;
+
+        ps.setObject(i+1,args[i]);
+
+    &#125;
+    //4.执行
+    ps.execute();
+    //5.关闭资源
+    JDBCUtils.closeResource(conn,ps);
+
+&#125;
+</code></pre>
 
       
 
