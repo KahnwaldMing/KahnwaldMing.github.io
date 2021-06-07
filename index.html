@@ -306,11 +306,31 @@
 <pre><code> 创建file文件(创建在当前的src下) 
 </code></pre>
 <p>  ② 读取Properties配置文件中的四个基本信息</p>
-<p> <code>InputStream is = ConnectionTest.class.getClassLoader.getResourceAsStream;</code><br> <code>Properties pro = new Properties();</code><br> <code>pro.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>  </p>
+<p> <code>InputStream is = ConnectionTest.class.getClassLoader.getResourceAsStream;</code><br> <code>Properties pro = new Properties();</code><br> <code>pro.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>    </p>
 <p>  ③ 加载驱动</p>
-<p> <code>froName(driverClass);</code></p>
+<p> <code>Class.forName(driverClass);</code></p>
 <p>  ④ 获取连接</p>
 <p> <code>Connection conn = DriverManage.getConnection(url,user,password);</code></p>
+<h2 id="二、-使用PreparedStatement-操作数据表"><a href="#二、-使用PreparedStatement-操作数据表" class="headerlink" title="二、 使用PreparedStatement 操作数据表"></a>二、 使用PreparedStatement 操作数据表</h2><h3 id="1-使用Statement操作数据表的弊端"><a href="#1-使用Statement操作数据表的弊端" class="headerlink" title="1. 使用Statement操作数据表的弊端"></a>1. 使用Statement操作数据表的弊端</h3><pre><code>  在介绍PreparedStatement之前，先介绍下Statement接口,PreparedStatement是继承Statement的子接口。在使用Statement操作数据表时,会
+  出现SQL注入的问题
+    
+  SQL注入：利用某些系统没有对用户输入的数据进行充分的检查，而在用户输入数据中注入非法的 SQL 语句段或命令，从而利用SQL的引擎完成恶意行为。
+</code></pre>
+<h3 id="2-使用PreparedStatement"><a href="#2-使用PreparedStatement" class="headerlink" title="2.使用PreparedStatement"></a>2.使用PreparedStatement</h3><p>  ① 读取配置信息  </p>
+<p> <code>InputStream is = ClassLoader,getSystemClassLoader().getResourceAsStream(&quot;jdbc.properties&quot;;)</code><br> <code>Properties ps = new Properties();</code><br> <code>ps.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>  </p>
+<p>  ② 加载驱动  </p>
+<p> <code>Class.forName(driverClass);</code></p>
+<p>  ③ 获取连接  </p>
+<p> <code>Connection conn = DriverManager.getConnection(url,user,password);</code>  </p>
+<p>  ④ 预编译SQL语句(以插入数据为例)  </p>
+<p> <code>String sql = &quot;insert into beauty(name,sex,phone) values (?,?,?)&quot;;</code><br> <code>PreparedStatement ps = conn.prepareStatement(sql);</code>   </p>
+<p>  ⑤ 填充占位符 </p>
+<p> <code>ps.setSObject(&quot;1&quot;,&quot;哪吒&quot;);</code><br> <code>ps.setSObject(&quot;2&quot;,&quot;女&quot;);</code><br> <code>ps.setSObject(&quot;3&quot;,&quot;1111&quot;);</code>  </p>
+<p>  ⑥ 执行操作  </p>
+<p> <code>ps.execute();</code></p>
+<p>  ⑦ 关闭资源  </p>
+<p> <code>ps.close();</code><br> <code>is.close();</code>
+  </p>
 
       
 
@@ -818,11 +838,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
+                <a href="javascript:void(0)" class="js-tag color5">exception</a>
               </li>
              
               <li class="article-tag-list-item">
