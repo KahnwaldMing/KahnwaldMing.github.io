@@ -316,7 +316,7 @@
     
   SQL注入：利用某些系统没有对用户输入的数据进行充分的检查，而在用户输入数据中注入非法的 SQL 语句段或命令，从而利用SQL的引擎完成恶意行为。
 </code></pre>
-<h3 id="2-使用PreparedStatement"><a href="#2-使用PreparedStatement" class="headerlink" title="2.使用PreparedStatement"></a>2.使用PreparedStatement</h3><p>  ① 读取配置信息  </p>
+<h3 id="2-使用PreparedStatement对数据库进行增删改操作"><a href="#2-使用PreparedStatement对数据库进行增删改操作" class="headerlink" title="2.使用PreparedStatement对数据库进行增删改操作"></a>2.使用PreparedStatement对数据库进行增删改操作</h3><p>  ① 读取配置信息  </p>
 <p> <code>InputStream is = ClassLoader,getSystemClassLoader().getResourceAsStream(&quot;jdbc.properties&quot;;)</code><br> <code>Properties ps = new Properties();</code><br> <code>ps.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>  </p>
 <p>  ② 加载驱动  </p>
 <p> <code>Class.forName(driverClass);</code></p>
@@ -374,10 +374,8 @@ public static void closeSource(Connection conn,PreparedStatement ps)&#123;
     
 &#125;
 </code></pre>
-<h3 id="4-update-方法"><a href="#4-update-方法" class="headerlink" title="4. update 方法"></a>4. update 方法</h3><pre><code>通过java操作数据库时，增删改的操作步骤一致，因此制订一套标准将其封装在update方法中
-
-
-public void update(String sql,Object ...args)&#123;
+<h3 id="4-update-方法"><a href="#4-update-方法" class="headerlink" title="4. update 方法"></a>4. update 方法</h3><p>  通过jdbc操作数据库时，增删改的操作步骤一致，因此制订一套标准将其封装在update方法中</p>
+<pre><code>public void update(String sql,Object ...args)&#123;
     //1.获取连接
     Connection conn = JDBCUtils.getConnection();
     //2.预编译sql语句，返回PreparedStatement的实例
@@ -394,6 +392,41 @@ public void update(String sql,Object ...args)&#123;
     JDBCUtils.closeResource(conn,ps);
 
 &#125;
+</code></pre>
+<h3 id="5-使用PreparedStatement对数据库进行查询操作"><a href="#5-使用PreparedStatement对数据库进行查询操作" class="headerlink" title="5. 使用PreparedStatement对数据库进行查询操作"></a>5. 使用PreparedStatement对数据库进行查询操作</h3><p>  ① 获取连接<br> <code>JDBCUtils.getConnection();</code>  </p>
+<p>  ② 预编译sql语句<br> <code>String sql = &quot;查询语句&quot;;</code><br> <code>PreparedStatement ps = conn.prepareStatement(sql);</code></p>
+<p>  ③ 填充占位符<br> <code>ps.setObject(占位符的索引,填充的内容);</code>  </p>
+<p>  ④ 执行，返回结果集<br> <code>ResultSet rs = ps.executeQuary();</code> </p>
+<p>  ⑤ 处理结果集<br> <code>if(rs.next() != null)&#123;  &#125;</code></p>
+<p>  ⑥ 关闭资源<br> <code>JDBCUtils.closeResource(conn,ps,rs);</code></p>
+<h3 id="6-对数据库进行通用的查询操作"><a href="#6-对数据库进行通用的查询操作" class="headerlink" title="6. 对数据库进行通用的查询操作"></a>6. 对数据库进行通用的查询操作</h3><pre><code>思路：
+    ① 和数据库建立连接，获取数据库的数据表
+
+    ② 预编译sql语句
+    
+    ③ 填充占位符(此时SQL语句就已经完全写好了，所要查询的内容已经确定了)
+
+    ④ 执行语句，并且返回结果集(包含所查询的表的结构，及其所要查询的数据)
+
+    ⑤ 获取表的元数据(也就是获取表的结构)
+
+    ⑥ 返回表中的列数
+
+    造一个customers的对象
+    
+    ⑦ 获取结果集中第一个列所匹配的对应的值
+
+    ⑧ 通过表的元数据获取第一个列的列名
+    
+    ⑨ 通过反射返回上一步中从元数据中获取到的列的名字在customers中对应的属性
+
+    ⑩ 反射的方式对该属性进行赋值：将获取到的对应的值赋值给该属性
+</code></pre>
+<p>  写一个循环，以列数为循环的次数，所以该循环的具体操作过称为：（以customers为例）  </p>
+<pre><code>  sql语句为&quot;select id,name,email,phone from customers where id = 1&quot;;以列数为循环的次数。第一次循环时，先找到结果集中的
+列数为1的对应的值，即id对应的值:1，返回为columnObject = 1，然后通过元数据获取列数为1对应的列名，即返回columnName = id。此
+时我们获取到的的是第一列的列名和值。然后我们要通过数据表对应类来获取此时接收到的列名对应的属性，然后将这个列名对应的值赋值给这
+个属性，此时我们所查询出来的值就从刚刚的数据表，变为了数据表对应类的一个对象的对应属性的值。
 </code></pre>
 
       
@@ -902,7 +935,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
+                <a href="javascript:void(0)" class="js-tag color1">数据库学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -910,7 +943,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">数据库学习</a>
+                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
               </li>
             
             <div class="clearfix"></div>
