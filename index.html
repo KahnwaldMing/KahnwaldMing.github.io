@@ -428,6 +428,59 @@ public static void closeSource(Connection conn,PreparedStatement ps)&#123;
 时我们获取到的的是第一列的列名和值。然后我们要通过数据表对应类来获取此时接收到的列名对应的属性，然后将这个列名对应的值赋值给这
 个属性，此时我们所查询出来的值就从刚刚的数据表，变为了数据表对应类的一个对象的对应属性的值。
 </code></pre>
+<h4 id="1-查询单条数据的通用方法"><a href="#1-查询单条数据的通用方法" class="headerlink" title="(1) 查询单条数据的通用方法"></a>(1) 查询单条数据的通用方法</h4><pre><code>publi &lt;T&gt; T getInstance(Class&lt;T&gt; clazz,String sql,Object...args)throws Exception&#123;
+
+
+1 获取连接  
+Connection conn = JDBCUtils.getConnection();
+
+2.预编译sql语句  
+  PreparedStatement ps = conn.prepareStatement(sql);
+
+3.执行并且获取结果集
+ResultSey rs = ps.executeQuery();
+
+4.获取结果集中的元数据
+ResultSetrsMetaData rsmd= rs.getMetaData();
+
+5.返回列数
+int columnCount = rsmd.getColumnCount();
+
+if(rs.next())&#123;
+
+6.创建操作表对应的类的对象
+T t = clazz.newInstance();
+
+for(int i=0;i &lt;columnCount;i++)&#123;
+
+7.获取第i+1列的值
+Object columnValue = rs.getObject(i+1);
+
+8.返回第i+1列的列名
+String columnLabel = rsmd.getColumnLabel(i+1);
+
+9.获取操作表对应的类的属性
+Field field = clazz.getDeclaredField(columLabel);
+field.setAccessible(true);
+
+10.将值封装到t中//set:将field所属的类的field属性设置为columnValue
+field.set(t,columnValue);
+        &#125;
+return t;
+    &#125;
+
+JDBCUtils.closeResource(conn,ps,rs);
+
+return null;
+&#125;
+</code></pre>
+<p> 涉及到的知识点：</p>
+<pre><code>1.泛型方法
+2.集合的使用
+3.可变形参
+4.反射
+    
+</code></pre>
 
       
 
@@ -935,15 +988,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">数据库学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">exception</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">数据库学习</a>
               </li>
             
             <div class="clearfix"></div>
