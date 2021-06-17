@@ -311,11 +311,100 @@
 <p> <code>Class.forName(driverClass);</code></p>
 <p>  ④ 获取连接</p>
 <p> <code>Connection conn = DriverManage.getConnection(url,user,password);</code></p>
-<h2 id="二、-使用PreparedStatement-操作数据表"><a href="#二、-使用PreparedStatement-操作数据表" class="headerlink" title="二、 使用PreparedStatement 操作数据表"></a>二、 使用PreparedStatement 操作数据表</h2><h3 id="1-使用Statement操作数据表的弊端"><a href="#1-使用Statement操作数据表的弊端" class="headerlink" title="1. 使用Statement操作数据表的弊端"></a>1. 使用Statement操作数据表的弊端</h3><pre><code>  在介绍PreparedStatement之前，先介绍下Statement接口,PreparedStatement是继承Statement的子接口。在使用Statement操作数据表时,会
-  出现SQL注入的问题
-    
-  SQL注入：利用某些系统没有对用户输入的数据进行充分的检查，而在用户输入数据中注入非法的 SQL 语句段或命令，从而利用SQL的引擎完成恶意行为。
-</code></pre>
+<h2 id="三、-使用PreparedStatement-进行CRUD操作"><a href="#三、-使用PreparedStatement-进行CRUD操作" class="headerlink" title="三、 使用PreparedStatement 进行CRUD操作"></a>三、 使用PreparedStatement 进行CRUD操作</h2><h3 id="3-1-操作和访问数据表"><a href="#3-1-操作和访问数据表" class="headerlink" title="3.1 操作和访问数据表"></a>3.1 操作和访问数据表</h3><ul>
+<li>数据库连接被用于向数据库服务器发送命令和SQL语句，并接受数据库服务器返回的结果。其实数据库连接就是一个socket连接。</li>
+<li>在java.sql包中有三个接口分别定义了对数据库的调用方式的不同：<ul>
+<li>Statement：用于静态的执行SQL语句，并且返回执行的结果</li>
+<li>PreparedStatement：SQL预编译后储存在该对象中，可以使用此对象多次高效地执行该语句。</li>
+<li>CallableStatement：用于执行 SQL 存储过程。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-使用Statement操作数据表的弊端"><a href="#3-2-使用Statement操作数据表的弊端" class="headerlink" title="3.2 使用Statement操作数据表的弊端"></a>3.2 使用Statement操作数据表的弊端</h3><ul>
+<li><p>通过调用 Connection 对象的 createStatement() 方法创建该对象。该对象用于执行静态的 SQL 语句，并且返回执行结果。</p>
+</li>
+<li><p>Statement 接口中定义了下列方法用于执行 SQL 语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> excuteUpdate(String <span class="keyword">sql</span>)：执行更新操作<span class="keyword">INSERT</span>、UPDATE、<span class="keyword">DELETE</span>   </span><br><span class="line">ResultSet executeQuery(String <span class="keyword">sql</span>)：执行查询操作<span class="keyword">SELECT</span></span><br></pre></td></tr></table></figure></li>
+<li><p>但是使用Statement操作数据表存在弊端：</p>
+<ul>
+<li><strong>问题一：存在拼串操作，繁琐</strong></li>
+<li><strong>问题二：存在SQL注入问题</strong></li>
+</ul>
+</li>
+<li><p>SQL 注入是利用某些系统没有对用户输入的数据进行充分的检查，而在用户输入数据中注入非法的 SQL 语句段或命令(如：SELECT user, password FROM user_table WHERE user=’a’ OR 1 = ‘ AND password = ‘ OR ‘1’ = ‘1’) ，从而利用系统的 SQL 引擎完成恶意行为的做法。</p>
+</li>
+<li><p>对于 Java 而言，要防范 SQL 注入，只要用 PreparedStatement(从Statement扩展而来) 取代 Statement 就可以了。</p>
+</li>
+</ul>
+<h3 id="3-3-PreparedStatement的使用"><a href="#3-3-PreparedStatement的使用" class="headerlink" title="3.3 PreparedStatement的使用"></a>3.3 PreparedStatement的使用</h3><h4 id="3-3-1-PreparedStatement介绍"><a href="#3-3-1-PreparedStatement介绍" class="headerlink" title="3.3.1 PreparedStatement介绍"></a>3.3.1 PreparedStatement介绍</h4><ul>
+<li><p>可以通过调用 Connection 对象的 <strong>preparedStatement(String sql)</strong> 方法获取 PreparedStatement 对象</p>
+</li>
+<li><p><strong>PreparedStatement 接口是 Statement 的子接口，它表示一条预编译过的 SQL 语句</strong></p>
+</li>
+<li><p>PreparedStatement 对象所代表的 SQL 语句中的参数用问号(?)来表示，调用 PreparedStatement 对象的 setXxx() 方法来设置这些参数. setXxx() 方法有两个参数，第一个参数是要设置的 SQL 语句中的参数的索引(从 1 开始)，第二个是设置的 SQL 语句中的参数的值</p>
+</li>
+</ul>
+<h4 id="3-3-2-PreparedStatement-vs-Statement"><a href="#3-3-2-PreparedStatement-vs-Statement" class="headerlink" title="3.3.2 PreparedStatement vs Statement"></a>3.3.2 PreparedStatement vs Statement</h4><ul>
+<li><p>代码的可读性和可维护性。</p>
+</li>
+<li><p><strong>PreparedStatement 能最大可能提高性能：</strong></p>
+<ul>
+<li>DBServer会对<strong>预编译</strong>语句提供性能优化。因为预编译语句有可能被重复调用，所以<u>语句在被DBServer的编译器编译后的执行代码被缓存下来，那么下次调用时只要是相同的预编译语句就不需要编译，只要将参数直接传入编译过的语句执行代码中就会得到执行。</u></li>
+<li>在statement语句中,即使是相同操作但因为数据内容不一样,所以整个语句本身不能匹配,没有缓存语句的意义.事实是没有数据库会对普通语句编译后的执行代码缓存。这样<u>每执行一次都要对传入的语句编译一次。</u></li>
+<li>(语法检查，语义检查，翻译成二进制命令，缓存)</li>
+</ul>
+</li>
+<li><p>PreparedStatement 可以防止 SQL 注入 </p>
+</li>
+</ul>
+<h4 id="3-3-3-Java与SQL对应数据类型转换表"><a href="#3-3-3-Java与SQL对应数据类型转换表" class="headerlink" title="3.3.3 Java与SQL对应数据类型转换表"></a>3.3.3 Java与SQL对应数据类型转换表</h4><table>
+<thead>
+<tr>
+<th>Java类型</th>
+<th>SQL类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>boolean</td>
+<td>BIT</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>TINYINT</td>
+</tr>
+<tr>
+<td>short</td>
+<td>SMALLINT</td>
+</tr>
+<tr>
+<td>int</td>
+<td>INTEGER</td>
+</tr>
+<tr>
+<td>long</td>
+<td>BIGINT</td>
+</tr>
+<tr>
+<td>String</td>
+<td>CHAR,VARCHAR,LONGVARCHAR</td>
+</tr>
+<tr>
+<td>byte   array</td>
+<td>BINARY  ,    VAR BINARY</td>
+</tr>
+<tr>
+<td>java.sql.Date</td>
+<td>DATE</td>
+</tr>
+<tr>
+<td>java.sql.Time</td>
+<td>TIME</td>
+</tr>
+<tr>
+<td>java.sql.Timestamp</td>
+<td>TIMESTAMP</td>
+</tr>
+</tbody></table>
 <h3 id="2-使用PreparedStatement对数据库进行增删改操作"><a href="#2-使用PreparedStatement对数据库进行增删改操作" class="headerlink" title="2.使用PreparedStatement对数据库进行增删改操作"></a>2.使用PreparedStatement对数据库进行增删改操作</h3><p>  ① 读取配置信息  </p>
 <p> <code>InputStream is = ClassLoader,getSystemClassLoader().getResourceAsStream(&quot;jdbc.properties&quot;;)</code><br> <code>Properties ps = new Properties();</code><br> <code>ps.load(is);</code><br> <code>String user = pro.getProperties(&quot;user&quot;);</code><br> <code>Stirng password = pro.getProperties(&quot;password&quot;);</code><br> <code>String url = pro.getProperties(&quot;url&quot;);</code><br> <code>String driverClass = pro.getProperties(&quot;driverClass&quot;);</code>  </p>
 <p>  ② 加载驱动  </p>
@@ -435,7 +524,7 @@ public static void closeSource(Connection conn,PreparedStatement ps)&#123;
 Connection conn = JDBCUtils.getConnection();
 
 2.预编译sql语句  
-  PreparedStatement ps = conn.prepareStatement(sql);
+PreparedStatement ps = conn.prepareStatement(sql);
 
 3.执行并且获取结果集
 ResultSey rs = ps.executeQuery();
@@ -475,12 +564,73 @@ return null;
 &#125;
 </code></pre>
 <p> 涉及到的知识点：</p>
+<p>  1.泛型方法  </p>
+<pre><code>权限修饰符 &lt;T&gt; 返回值类型 方法名(形参列表)&#123;&#125;  
+说明：1. 泛型方法与泛型类是否为泛型无关
+     2. 泛型方法中的泛型只适用于当前方法，因此需要在选线修饰符后显式的声明
+     3. 泛型方法可以声明为静态，原因：泛型是在调用方法时才需要确定的    
+
+2.集合的使用
+3.可变形参
+4.反射
+</code></pre>
+<h4 id="2-查询多条数据的通用方法"><a href="#2-查询多条数据的通用方法" class="headerlink" title="(2) 查询多条数据的通用方法"></a>(2) 查询多条数据的通用方法</h4><pre><code>publi &lt;T&gt; List&lt;T&gt; getInstance(Class&lt;T&gt; clazz,String sql,Object...args)throws Exception&#123;
+
+
+1 获取连接  
+Connection conn = JDBCUtils.getConnection();
+
+2.预编译sql语句  
+PreparedStatement ps = conn.prepareStatement(sql);
+
+3.执行并且获取结果集
+ResultSey rs = ps.executeQuery();
+
+4.获取结果集中的元数据
+ResultSetrsMetaData rsmd= rs.getMetaData();
+
+5.返回列数
+int columnCount = rsmd.getColumnCount();
+
+ArrayList&lt;T&gt; list = new ArrayList&lt;&gt;();    
+
+while(rs.next())&#123;
+
+6.创建操作表对应的类的对象
+T t = clazz.newInstance();
+
+for(int i=0;i &lt;columnCount;i++)&#123;
+
+7.获取第i+1列的值
+Object columnValue = rs.getObject(i+1);
+
+8.返回第i+1列的列名
+String columnLabel = rsmd.getColumnLabel(i+1);
+
+9.获取操作表对应的类的属性
+Field field = clazz.getDeclaredField(columLabel);
+field.setAccessible(true);
+
+10.将值封装到t中//set:将field所属的类的field属性设置为columnValue
+field.set(t,columnValue);
+        &#125;
+list.add(t);
+    &#125;
+return list;
+
+JDBCUtils.closeResource(conn,ps,rs);
+
+return null;
+&#125;
+</code></pre>
+<p> 涉及到的知识点：</p>
 <pre><code>1.泛型方法
 2.集合的使用
 3.可变形参
 4.反射
-    
+5.集合
 </code></pre>
+<p>​    </p>
 
       
 
@@ -765,7 +915,7 @@ select 查询列表 ⑦
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/05/20/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">我的第一篇博客文章</a>
+      <a class="article-title" href="/2021/05/20/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/">零散的知识点</a>
     </h1>
   
 
@@ -778,7 +928,10 @@ select 查询列表 ⑦
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><p> 静态方法：是随着类的加载而加载的</p>
+<p>当某个类为泛型类，  </p>
+<p>其中某个方法使用到了类中声明的泛型，那么该方法就不能声明为static<br>因为静态方法是随着类的加载而加载的，此时泛型类的类型是不确定的，就会报错<br>但是如果该方法为泛型方法，该方法的泛型与类的泛型是无关的，因此不会报错。<br>泛型方法中的类型在调用方法才需要确定是什么，而第一种情况下，在创建类的时候就确定了</p>
+
       
 
       
@@ -988,11 +1141,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">jdbc</a>
+                <a href="javascript:void(0)" class="js-tag color5">exception</a>
               </li>
              
               <li class="article-tag-list-item">
