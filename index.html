@@ -708,7 +708,121 @@ return null;
 </li>
 </ul>
 <hr>
-<p>​    </p>
+<h2 id="第四章-操作BLOB类型的字段"><a href="#第四章-操作BLOB类型的字段" class="headerlink" title="第四章 操作BLOB类型的字段"></a>第四章 操作BLOB类型的字段</h2><h3 id="4-1-BLOB类型"><a href="#4-1-BLOB类型" class="headerlink" title="4.1 BLOB类型"></a>4.1 BLOB类型</h3><ul>
+<li>MySQL中，BOLB 是一个二进制大型对象，是一个可以存储大量数据的容器，他能容纳大小不同的数据。</li>
+<li>插入BLOB类型的数据必须PreparedStatement，因为BLOB类型的数据是无法使用字符串拼接的。</li>
+<li>MySQL的定义了四种BLOB类型。</li>
+<li>实际使用中根据需要存入的数据大小定义不同的BLOB类型。</li>
+<li>需要注意的是：如果存储的文件过大，数据库的性能会下降。</li>
+<li>如果在指定了相关的Blob类型以后，还报错：xxx too large，那么在mysql的安装目录下，找my.ini文件加上如下的配置参数： <strong>max_allowed_packet=16M</strong>。同时注意：修改了my.ini文件之后，需要重新启动mysql服务。</li>
+</ul>
+<h3 id="4-2-向数据表中插入BLOB类型的数据"><a href="#4-2-向数据表中插入BLOB类型的数据" class="headerlink" title="4.2 向数据表中插入BLOB类型的数据"></a>4.2 向数据表中插入BLOB类型的数据</h3><pre><code>//获取连接
+Connection conn = JDBCUtiles.getConnection();
+
+//预编译sql语句
+String sql = &quot;insert into customers(name,email,birth,photo)values(?,?,?,?)&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+ps.setString(1,&quot;zheng&quot;);
+ps.setString(2,&quot;zheng@qq.com&quot;);
+ps.setDate(3,&quot;2021-06-19&quot;);
+FileInputStream fis = new FileInputStream(&quot;zheng.png&quot;);
+ps.setBlob(4,fis);
+</code></pre>
+<p>​<br>    //执行<br>    ps.execute();</p>
+<pre><code>//关闭资源
+JDBCUtils.closeResource(conn,ps);
+fis.close();
+</code></pre>
+<h3 id="4-3-从数据表中读取BLOB类型的数据"><a href="#4-3-从数据表中读取BLOB类型的数据" class="headerlink" title="4.3 从数据表中读取BLOB类型的数据"></a>4.3 从数据表中读取BLOB类型的数据</h3><pre><code>//获取连接
+Connection conn = JDBCUtils.getConnection();
+
+//预编译sql语句
+String sql = &quot;select dia,name,email,birth,photo from customers where id = 1&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+ps.setInt(1,21);
+
+//执行并且获取结果集
+ResultSet rs = ps.executeQuery();
+
+
+if(rs.next())&#123;
+
+//读取基本数据类型的数据
+int id = rs.getInt(&quot;id&quot;);
+String name = rs.getString(&quot;name&quot;);
+String email = rs.getString(&quot;email&quot;);
+Date birth = rs.getDate(&quot;birth&quot;);
+
+Customer cust = new Customer(id,name,email,birth);
+System.out.println(cust);
+
+//读取Blob类型的数据
+Blob photo = rs.getB;lob(&quot;photo&quot;)
+InputStream is = photo.getBinaryStream();
+FileOutputStream fos = new FileOutputStream(&quot;li.png&quot;);
+Byte[] buffer = new Byte[1024];
+int len = 0;
+while((len = is.read(buffer)) != -1)&#123;
+
+os.write(buffer,0,len);
+
+    &#125;
+
+JDBCUtils.closeResource(conn,ps,rs);
+is.close();
+fos.close();
+
+&#125;
+</code></pre>
+<h2 id="第五章-批量插入"><a href="#第五章-批量插入" class="headerlink" title="第五章 批量插入"></a>第五章 批量插入</h2><h3 id="5-1-批量执行SQL语句"><a href="#5-1-批量执行SQL语句" class="headerlink" title="5.1 批量执行SQL语句"></a>5.1 批量执行SQL语句</h3><p>当需要成批插入或者更新记录时，可以采用Java的批量<strong>更新</strong>机制，这一机制允许多条语句一次性提交给数据库批量处理。通常情况下比单独提交处理更有效率</p>
+<p>JDBC的批量处理语句包括下面三个方法：  </p>
+<ul>
+<li><strong>addBatch(String)：添加需要批量处理的SQL语句或是参数；</strong>  </li>
+<li><strong>executeBatch()：执行批量处理语句；</strong>  </li>
+<li><strong>clearBatch():清空缓存的数据</strong>  </li>
+</ul>
+<p>通常我们会遇到两种批量执行SQL语句的情况：</p>
+<ul>
+<li>多条SQL语句的批量处理；</li>
+<li>一个SQL语句的批量传参；</li>
+</ul>
+<h3 id="5-2-向该数据表中批量的插入数据"><a href="#5-2-向该数据表中批量的插入数据" class="headerlink" title="5.2 向该数据表中批量的插入数据"></a>5.2 向该数据表中批量的插入数据</h3><pre><code>减少I/O操作，只进行一次提交
+
+//获取连接
+Connection conn = JDBCUtils.getConnection();
+
+//设置自动提交为false
+conn.setAutoCommit(false);
+
+//预编译sql语句
+String sql = &quot;insert into customers(name)values(?)&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+for(i = 1; i &lt;= 2000; i++)&#123;
+ps.setString(1,&quot;name_&quot; + i)
+
+//1.攒sql
+ps.addBatch();
+
+if(i % 500 == 0)&#123;
+//2.执行
+ps.executeBatch();
+//3.释放Batch
+clearBatch();
+    &#125;
+&#125;
+
+//提交数据
+conn.commit();
+
+//关闭资源
+JDBCUtils.closeResource(conn,ps);
+</code></pre>
 
       
 

@@ -16,7 +16,7 @@
 <meta property="og:description" content="一、获取数据库连接 方式一 ① 获取Driver的实例化对象  Driver driver &#x3D; new com.mysql.jdbc.Driver();  ② 提供所需的连接(可以在驱动的README.txt中获取到)  String url &#x3D; &quot;jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;test&quot;; ‘jdbc：mysql’:协议(jdbc为主协议,mysql">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-06T02:43:37.000Z">
-<meta property="article:modified_time" content="2021-06-18T09:26:40.247Z">
+<meta property="article:modified_time" content="2021-06-19T08:42:09.970Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="jdbc">
 <meta name="twitter:card" content="summary">
@@ -628,7 +628,121 @@ return null;
 </li>
 </ul>
 <hr>
-<p>​    </p>
+<h2 id="第四章-操作BLOB类型的字段"><a href="#第四章-操作BLOB类型的字段" class="headerlink" title="第四章 操作BLOB类型的字段"></a>第四章 操作BLOB类型的字段</h2><h3 id="4-1-BLOB类型"><a href="#4-1-BLOB类型" class="headerlink" title="4.1 BLOB类型"></a>4.1 BLOB类型</h3><ul>
+<li>MySQL中，BOLB 是一个二进制大型对象，是一个可以存储大量数据的容器，他能容纳大小不同的数据。</li>
+<li>插入BLOB类型的数据必须PreparedStatement，因为BLOB类型的数据是无法使用字符串拼接的。</li>
+<li>MySQL的定义了四种BLOB类型。</li>
+<li>实际使用中根据需要存入的数据大小定义不同的BLOB类型。</li>
+<li>需要注意的是：如果存储的文件过大，数据库的性能会下降。</li>
+<li>如果在指定了相关的Blob类型以后，还报错：xxx too large，那么在mysql的安装目录下，找my.ini文件加上如下的配置参数： <strong>max_allowed_packet=16M</strong>。同时注意：修改了my.ini文件之后，需要重新启动mysql服务。</li>
+</ul>
+<h3 id="4-2-向数据表中插入BLOB类型的数据"><a href="#4-2-向数据表中插入BLOB类型的数据" class="headerlink" title="4.2 向数据表中插入BLOB类型的数据"></a>4.2 向数据表中插入BLOB类型的数据</h3><pre><code>//获取连接
+Connection conn = JDBCUtiles.getConnection();
+
+//预编译sql语句
+String sql = &quot;insert into customers(name,email,birth,photo)values(?,?,?,?)&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+ps.setString(1,&quot;zheng&quot;);
+ps.setString(2,&quot;zheng@qq.com&quot;);
+ps.setDate(3,&quot;2021-06-19&quot;);
+FileInputStream fis = new FileInputStream(&quot;zheng.png&quot;);
+ps.setBlob(4,fis);
+</code></pre>
+<p>​<br>    //执行<br>    ps.execute();</p>
+<pre><code>//关闭资源
+JDBCUtils.closeResource(conn,ps);
+fis.close();
+</code></pre>
+<h3 id="4-3-从数据表中读取BLOB类型的数据"><a href="#4-3-从数据表中读取BLOB类型的数据" class="headerlink" title="4.3 从数据表中读取BLOB类型的数据"></a>4.3 从数据表中读取BLOB类型的数据</h3><pre><code>//获取连接
+Connection conn = JDBCUtils.getConnection();
+
+//预编译sql语句
+String sql = &quot;select dia,name,email,birth,photo from customers where id = 1&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+ps.setInt(1,21);
+
+//执行并且获取结果集
+ResultSet rs = ps.executeQuery();
+
+
+if(rs.next())&#123;
+
+//读取基本数据类型的数据
+int id = rs.getInt(&quot;id&quot;);
+String name = rs.getString(&quot;name&quot;);
+String email = rs.getString(&quot;email&quot;);
+Date birth = rs.getDate(&quot;birth&quot;);
+
+Customer cust = new Customer(id,name,email,birth);
+System.out.println(cust);
+
+//读取Blob类型的数据
+Blob photo = rs.getB;lob(&quot;photo&quot;)
+InputStream is = photo.getBinaryStream();
+FileOutputStream fos = new FileOutputStream(&quot;li.png&quot;);
+Byte[] buffer = new Byte[1024];
+int len = 0;
+while((len = is.read(buffer)) != -1)&#123;
+
+os.write(buffer,0,len);
+
+    &#125;
+
+JDBCUtils.closeResource(conn,ps,rs);
+is.close();
+fos.close();
+
+&#125;
+</code></pre>
+<h2 id="第五章-批量插入"><a href="#第五章-批量插入" class="headerlink" title="第五章 批量插入"></a>第五章 批量插入</h2><h3 id="5-1-批量执行SQL语句"><a href="#5-1-批量执行SQL语句" class="headerlink" title="5.1 批量执行SQL语句"></a>5.1 批量执行SQL语句</h3><p>当需要成批插入或者更新记录时，可以采用Java的批量<strong>更新</strong>机制，这一机制允许多条语句一次性提交给数据库批量处理。通常情况下比单独提交处理更有效率</p>
+<p>JDBC的批量处理语句包括下面三个方法：  </p>
+<ul>
+<li><strong>addBatch(String)：添加需要批量处理的SQL语句或是参数；</strong>  </li>
+<li><strong>executeBatch()：执行批量处理语句；</strong>  </li>
+<li><strong>clearBatch():清空缓存的数据</strong>  </li>
+</ul>
+<p>通常我们会遇到两种批量执行SQL语句的情况：</p>
+<ul>
+<li>多条SQL语句的批量处理；</li>
+<li>一个SQL语句的批量传参；</li>
+</ul>
+<h3 id="5-2-向该数据表中批量的插入数据"><a href="#5-2-向该数据表中批量的插入数据" class="headerlink" title="5.2 向该数据表中批量的插入数据"></a>5.2 向该数据表中批量的插入数据</h3><pre><code>减少I/O操作，只进行一次提交
+
+//获取连接
+Connection conn = JDBCUtils.getConnection();
+
+//设置自动提交为false
+conn.setAutoCommit(false);
+
+//预编译sql语句
+String sql = &quot;insert into customers(name)values(?)&quot;;
+PreparedStatement ps = conn.prepareStatement(sql);
+
+//填充占位符
+for(i = 1; i &lt;= 2000; i++)&#123;
+ps.setString(1,&quot;name_&quot; + i)
+
+//1.攒sql
+ps.addBatch();
+
+if(i % 500 == 0)&#123;
+//2.执行
+ps.executeBatch();
+//3.释放Batch
+clearBatch();
+    &#125;
+&#125;
+
+//提交数据
+conn.commit();
+
+//关闭资源
+JDBCUtils.closeResource(conn,ps);
+</code></pre>
 
       
 
@@ -771,7 +885,7 @@ return null;
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.</span> <span class="toc-text">一、获取数据库连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80"><span class="toc-number">1.1.</span> <span class="toc-text">方式一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">方式二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%89"><span class="toc-number">1.3.</span> <span class="toc-text">方式三</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E5%9B%9B"><span class="toc-number">1.4.</span> <span class="toc-text">方式四</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%94"><span class="toc-number">1.5.</span> <span class="toc-text">方式五</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E4%BD%BF%E7%94%A8PreparedStatement-%E8%BF%9B%E8%A1%8CCRUD%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">三、 使用PreparedStatement 进行CRUD操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDBCUtils"><span class="toc-number">2.1.</span> <span class="toc-text">JDBCUtils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%93%8D%E4%BD%9C%E5%92%8C%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="toc-number">2.2.</span> <span class="toc-text">3.1 操作和访问数据表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BD%BF%E7%94%A8Statement%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="toc-number">2.3.</span> <span class="toc-text">3.2 使用Statement操作数据表的弊端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-PreparedStatement%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">3.3 PreparedStatement的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-PreparedStatement%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.4.1.</span> <span class="toc-text">3.3.1 PreparedStatement介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-PreparedStatement-vs-Statement"><span class="toc-number">2.4.2.</span> <span class="toc-text">3.3.2 PreparedStatement vs Statement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-Java%E4%B8%8ESQL%E5%AF%B9%E5%BA%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A1%A8"><span class="toc-number">2.4.3.</span> <span class="toc-text">3.3.3 Java与SQL对应数据类型转换表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-%E4%BD%BF%E7%94%A8PreparedStatement%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%93%8D%E4%BD%9C"><span class="toc-number">2.4.4.</span> <span class="toc-text">3.3.4.使用PreparedStatement对数据库进行增删改操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-5-%E4%BD%BF%E7%94%A8PreparedStataement%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9B%E8%A1%8C%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.4.5.</span> <span class="toc-text">3.3.5 使用PreparedStataement对数据库进行查询操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-ResultSet%E4%B8%8EResultSetMetaData"><span class="toc-number">2.5.</span> <span class="toc-text">3.4 ResultSet与ResultSetMetaData</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-ResultSet"><span class="toc-number">2.5.1.</span> <span class="toc-text">3.4.1 ResultSet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-ResultSetMetaData"><span class="toc-number">2.5.2.</span> <span class="toc-text">3.4.2 ResultSetMetaData</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E8%B5%84%E6%BA%90%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">2.6.</span> <span class="toc-text">3.5 资源的释放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-JDBC-API%E5%B0%8F%E7%BB%93"><span class="toc-number">2.7.</span> <span class="toc-text">3.6 JDBC API小结</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.</span> <span class="toc-text">一、获取数据库连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80"><span class="toc-number">1.1.</span> <span class="toc-text">方式一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">方式二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%89"><span class="toc-number">1.3.</span> <span class="toc-text">方式三</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E5%9B%9B"><span class="toc-number">1.4.</span> <span class="toc-text">方式四</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%94"><span class="toc-number">1.5.</span> <span class="toc-text">方式五</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E4%BD%BF%E7%94%A8PreparedStatement-%E8%BF%9B%E8%A1%8CCRUD%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">三、 使用PreparedStatement 进行CRUD操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDBCUtils"><span class="toc-number">2.1.</span> <span class="toc-text">JDBCUtils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%93%8D%E4%BD%9C%E5%92%8C%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="toc-number">2.2.</span> <span class="toc-text">3.1 操作和访问数据表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BD%BF%E7%94%A8Statement%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="toc-number">2.3.</span> <span class="toc-text">3.2 使用Statement操作数据表的弊端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-PreparedStatement%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">3.3 PreparedStatement的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-PreparedStatement%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.4.1.</span> <span class="toc-text">3.3.1 PreparedStatement介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-PreparedStatement-vs-Statement"><span class="toc-number">2.4.2.</span> <span class="toc-text">3.3.2 PreparedStatement vs Statement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-Java%E4%B8%8ESQL%E5%AF%B9%E5%BA%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%A1%A8"><span class="toc-number">2.4.3.</span> <span class="toc-text">3.3.3 Java与SQL对应数据类型转换表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-%E4%BD%BF%E7%94%A8PreparedStatement%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%A2%9E%E5%88%A0%E6%94%B9%E6%93%8D%E4%BD%9C"><span class="toc-number">2.4.4.</span> <span class="toc-text">3.3.4.使用PreparedStatement对数据库进行增删改操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-5-%E4%BD%BF%E7%94%A8PreparedStataement%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9B%E8%A1%8C%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.4.5.</span> <span class="toc-text">3.3.5 使用PreparedStataement对数据库进行查询操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-ResultSet%E4%B8%8EResultSetMetaData"><span class="toc-number">2.5.</span> <span class="toc-text">3.4 ResultSet与ResultSetMetaData</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-ResultSet"><span class="toc-number">2.5.1.</span> <span class="toc-text">3.4.1 ResultSet</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-ResultSetMetaData"><span class="toc-number">2.5.2.</span> <span class="toc-text">3.4.2 ResultSetMetaData</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E8%B5%84%E6%BA%90%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">2.6.</span> <span class="toc-text">3.5 资源的释放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-JDBC-API%E5%B0%8F%E7%BB%93"><span class="toc-number">2.7.</span> <span class="toc-text">3.6 JDBC API小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E6%93%8D%E4%BD%9CBLOB%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%AD%97%E6%AE%B5"><span class="toc-number">3.</span> <span class="toc-text">第四章 操作BLOB类型的字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-BLOB%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.1.</span> <span class="toc-text">4.1 BLOB类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%90%91%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E6%8F%92%E5%85%A5BLOB%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">3.2.</span> <span class="toc-text">4.2 向数据表中插入BLOB类型的数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BB%8E%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E8%AF%BB%E5%8F%96BLOB%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">3.3.</span> <span class="toc-text">4.3 从数据表中读取BLOB类型的数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">第五章 批量插入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8CSQL%E8%AF%AD%E5%8F%A5"><span class="toc-number">4.1.</span> <span class="toc-text">5.1 批量执行SQL语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%90%91%E8%AF%A5%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E6%89%B9%E9%87%8F%E7%9A%84%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-number">4.2.</span> <span class="toc-text">5.2 向该数据表中批量的插入数据</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
