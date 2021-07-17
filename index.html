@@ -206,9 +206,13 @@ S：Server
 
 
 
+
+
 <img src="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717205648521.png" alt="image-20210717205648521" style="zoom:200%;" />
 
-<h2 id="6、HTML-文件的书写规范"><a href="#6、HTML-文件的书写规范" class="headerlink" title="6、HTML 文件的书写规范"></a>6、HTML 文件的书写规范</h2><pre><code>&lt;html&gt;                          &lt;!-- 表示整个html页面的开始 --&gt;
+
+
+<h2 id="6、HTML-文件的书写规"><a href="#6、HTML-文件的书写规" class="headerlink" title="6、HTML 文件的书写规"></a>6、HTML 文件的书写规</h2><h2 id="范"><a href="#范" class="headerlink" title="范"></a>范</h2><pre><code>&lt;html&gt;                          &lt;!-- 表示整个html页面的开始 --&gt;
     &lt;head&gt;                        &lt;!-- 头信息--&gt;
         &lt;title&gt;标题&lt;/title&gt;       &lt;!-- 标题 --&gt;
     &lt;/head&gt;
@@ -218,14 +222,14 @@ S：Server
 &lt;/html&gt;                             &lt;!-- 表示整个html页面的结束--&gt;
 </code></pre>
 <p> **<!-- 注释 --> ** ：代表html的注释，可以在页面右键的源代码中看到。</p>
-<h2 id="7-HTML标签介绍"><a href="#7-HTML标签介绍" class="headerlink" title="7. HTML标签介绍"></a>7. HTML标签介绍</h2><ul>
+<h2 id="7-HTML标签"><a href="#7-HTML标签" class="headerlink" title="7. HTML标签"></a>7. HTML标签</h2><h3 id="7-1-HTML标签的介绍"><a href="#7-1-HTML标签的介绍" class="headerlink" title="7.1 HTML标签的介绍"></a>7.1 HTML标签的介绍</h3><ul>
 <li><p>标签的格式 ：<br>  &lt;标签名&gt;封装的数据&lt;/标签名&gt;</p>
 </li>
 <li><p>标签名对大小写不敏感</p>
 </li>
 <li><p>标签拥有自己的属性</p>
 <ul>
-<li><strong>基本属性</strong>： 可以修改简单的样式效果。例如： bgcolor = “red”                             </li>
+<li><strong>基本属性</strong>： 可以修改简单的样式效果。例如： bgcolor = “red”      </li>
 <li><strong>事件属性</strong>： 可以直接设置事件响应后的代码。例如： onclick  = “alert(‘你好’);” </li>
 </ul>
 </li>
@@ -236,7 +240,30 @@ S：Server
 </ul>
 </li>
 </ul>
+<p>如图：</p>
 <img src="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717220334297.png" style="zoom:80%;" />
+
+<h3 id="7-2-HTML标签的语法"><a href="#7-2-HTML标签的语法" class="headerlink" title="7.2 HTML标签的语法"></a>7.2 HTML标签的语法</h3><ul>
+<li><p>标签不能进行交叉嵌套</p>
+</li>
+<li><p>标签必须正确的关闭</p>
+<ul>
+<li>有文本内容的标签</li>
+</ul>
+<p>  &lt;div&gt;早安，尚硅谷&lt;/div&gt;</p>
+<ul>
+<li>没有文本内容的标签</li>
+</ul>
+<p>  &lt;br/&gt;</p>
+</li>
+<li><p>属性必须有值，属性值必须带引号</p>
+</li>
+<li><p>注释不能嵌套</p>
+<blockquote>
+<p>html 代码不是很严谨。有时候标签不闭合，也不会报错。</p>
+</blockquote>
+</li>
+</ul>
 
       
 

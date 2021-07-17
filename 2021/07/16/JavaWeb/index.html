@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717205648521.png">
 <meta property="og:image" content="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717220334297.png">
 <meta property="article:published_time" content="2021-07-16T11:54:12.000Z">
-<meta property="article:modified_time" content="2021-07-17T14:06:25.166Z">
+<meta property="article:modified_time" content="2021-07-17T14:21:34.201Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717204815511.png">
@@ -214,9 +214,13 @@ S：Server
 
 
 
+
+
 <img src="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717205648521.png" alt="image-20210717205648521" style="zoom:200%;" />
 
-<h2 id="6、HTML-文件的书写规范"><a href="#6、HTML-文件的书写规范" class="headerlink" title="6、HTML 文件的书写规范"></a>6、HTML 文件的书写规范</h2><pre><code>&lt;html&gt;                          &lt;!-- 表示整个html页面的开始 --&gt;
+
+
+<h2 id="6、HTML-文件的书写规"><a href="#6、HTML-文件的书写规" class="headerlink" title="6、HTML 文件的书写规"></a>6、HTML 文件的书写规</h2><h2 id="范"><a href="#范" class="headerlink" title="范"></a>范</h2><pre><code>&lt;html&gt;                          &lt;!-- 表示整个html页面的开始 --&gt;
     &lt;head&gt;                        &lt;!-- 头信息--&gt;
         &lt;title&gt;标题&lt;/title&gt;       &lt;!-- 标题 --&gt;
     &lt;/head&gt;
@@ -226,14 +230,14 @@ S：Server
 &lt;/html&gt;                             &lt;!-- 表示整个html页面的结束--&gt;
 </code></pre>
 <p> **<!-- 注释 --> ** ：代表html的注释，可以在页面右键的源代码中看到。</p>
-<h2 id="7-HTML标签介绍"><a href="#7-HTML标签介绍" class="headerlink" title="7. HTML标签介绍"></a>7. HTML标签介绍</h2><ul>
+<h2 id="7-HTML标签"><a href="#7-HTML标签" class="headerlink" title="7. HTML标签"></a>7. HTML标签</h2><h3 id="7-1-HTML标签的介绍"><a href="#7-1-HTML标签的介绍" class="headerlink" title="7.1 HTML标签的介绍"></a>7.1 HTML标签的介绍</h3><ul>
 <li><p>标签的格式 ：<br>  &lt;标签名&gt;封装的数据&lt;/标签名&gt;</p>
 </li>
 <li><p>标签名对大小写不敏感</p>
 </li>
 <li><p>标签拥有自己的属性</p>
 <ul>
-<li><strong>基本属性</strong>： 可以修改简单的样式效果。例如： bgcolor = “red”                             </li>
+<li><strong>基本属性</strong>： 可以修改简单的样式效果。例如： bgcolor = “red”      </li>
 <li><strong>事件属性</strong>： 可以直接设置事件响应后的代码。例如： onclick  = “alert(‘你好’);” </li>
 </ul>
 </li>
@@ -244,7 +248,30 @@ S：Server
 </ul>
 </li>
 </ul>
+<p>如图：</p>
 <img src="https://gitee.com/wsm0911/picture_depo/raw/master/img/image-20210717220334297.png" style="zoom:80%;" />
+
+<h3 id="7-2-HTML标签的语法"><a href="#7-2-HTML标签的语法" class="headerlink" title="7.2 HTML标签的语法"></a>7.2 HTML标签的语法</h3><ul>
+<li><p>标签不能进行交叉嵌套</p>
+</li>
+<li><p>标签必须正确的关闭</p>
+<ul>
+<li>有文本内容的标签</li>
+</ul>
+<p>  &lt;div&gt;早安，尚硅谷&lt;/div&gt;</p>
+<ul>
+<li>没有文本内容的标签</li>
+</ul>
+<p>  &lt;br/&gt;</p>
+</li>
+<li><p>属性必须有值，属性值必须带引号</p>
+</li>
+<li><p>注释不能嵌套</p>
+<blockquote>
+<p>html 代码不是很严谨。有时候标签不闭合，也不会报错。</p>
+</blockquote>
+</li>
+</ul>
 
       
 
@@ -367,7 +394,7 @@ S：Server
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-HTML-amp-CSS"><span class="toc-number">1.</span> <span class="toc-text">第一章 HTML &amp; CSS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-B-S-%E8%BD%AF%E4%BB%B6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">1.B&#x2F;S 软件的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%89%8D%E6%AE%B5%E5%BC%80%E5%8F%91%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. 前段开发的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BD%91%E9%A1%B5%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-number">1.3.</span> <span class="toc-text">3. 网页的组成部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-HTML%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.</span> <span class="toc-text">4. HTML的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-HTML%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.5.</span> <span class="toc-text">5. HTML的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81HTML-%E6%96%87%E4%BB%B6%E7%9A%84%E4%B9%A6%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-number">1.6.</span> <span class="toc-text">6、HTML 文件的书写规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-HTML%E6%A0%87%E7%AD%BE%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.7.</span> <span class="toc-text">7. HTML标签介绍</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-HTML-amp-CSS"><span class="toc-number">1.</span> <span class="toc-text">第一章 HTML &amp; CSS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-B-S-%E8%BD%AF%E4%BB%B6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">1.B&#x2F;S 软件的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%89%8D%E6%AE%B5%E5%BC%80%E5%8F%91%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. 前段开发的流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BD%91%E9%A1%B5%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-number">1.3.</span> <span class="toc-text">3. 网页的组成部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-HTML%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.4.</span> <span class="toc-text">4. HTML的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-HTML%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="toc-number">1.5.</span> <span class="toc-text">5. HTML的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81HTML-%E6%96%87%E4%BB%B6%E7%9A%84%E4%B9%A6%E5%86%99%E8%A7%84"><span class="toc-number">1.6.</span> <span class="toc-text">6、HTML 文件的书写规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83"><span class="toc-number">1.7.</span> <span class="toc-text">范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-HTML%E6%A0%87%E7%AD%BE"><span class="toc-number">1.8.</span> <span class="toc-text">7. HTML标签</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-HTML%E6%A0%87%E7%AD%BE%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 HTML标签的介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-HTML%E6%A0%87%E7%AD%BE%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 HTML标签的语法</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
