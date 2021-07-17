@@ -161,21 +161,6 @@
     <article id="post-JavaWeb" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/07/16/JavaWeb/">JavaWeb</a>
-    </h1>
-  
-
-        
-        <a href="/2021/07/16/JavaWeb/" class="archive-article-date">
-  	<time datetime="2021-07-16T11:54:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-16</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="第一章-HTML-amp-CSS"><a href="#第一章-HTML-amp-CSS" class="headerlink" title="第一章 HTML &amp; CSS"></a>第一章 HTML &amp; CSS</h1><h2 id="1-B-S-软件的结构"><a href="#1-B-S-软件的结构" class="headerlink" title="1.B/S 软件的结构"></a>1.B/S 软件的结构</h2><p>客户端和服务器交互</p>
@@ -271,6 +256,116 @@ S：Server
 </blockquote>
 </li>
 </ul>
+<h2 id="8-常用的标签介绍"><a href="#8-常用的标签介绍" class="headerlink" title="8. 常用的标签介绍"></a>8. 常用的标签介绍</h2><h3 id="8-1-font-文本标签"><a href="#8-1-font-文本标签" class="headerlink" title="8.1 font 文本标签"></a>8.1 font 文本标签</h3><p> font 标签是文本标签，用来操作文本的 颜色、大小、字体</p>
+<blockquote>
+<p><strong>color</strong> : 修改文本的颜色<br><strong>size</strong> ：修改文本的大小<br><strong>face</strong> ： 修改文本的字体</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">	&lt;font color=&quot;red&quot; face=&quot;宋体&quot; size=&quot;7&quot;&gt;我是字体标签&lt;/font&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-特殊字符"><a href="#8-2-特殊字符" class="headerlink" title="8.2 特殊字符"></a>8.2 特殊字符</h3><p>  常见的特殊字符：</p>
+<table>
+<thead>
+<tr>
+<th align="center">特殊字符</th>
+<th align="center">代码，描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&gt;</td>
+<td align="center">空格 &amp;nbsp；</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">小于号 &amp;lt；</td>
+</tr>
+<tr>
+<td align="center">=</td>
+<td align="center">大于号 &amp;gt；</td>
+</tr>
+<tr>
+<td align="center">&amp;</td>
+<td align="center">和号 &amp;amp；</td>
+</tr>
+<tr>
+<td align="center">‘’</td>
+<td align="center">引号&amp;quot;</td>
+</tr>
+<tr>
+<td align="center">±</td>
+<td align="center">正负号 &amp;plusmn；</td>
+</tr>
+<tr>
+<td align="center">×</td>
+<td align="center">乘号 &amp;times；</td>
+</tr>
+<tr>
+<td align="center">÷</td>
+<td align="center">除号 &amp;divide；</td>
+</tr>
+<tr>
+<td align="center">²</td>
+<td align="center">平方2 &amp;sup2；</td>
+</tr>
+<tr>
+<td align="center">³</td>
+<td align="center">立方3 &amp;sup3；</td>
+</tr>
+</tbody></table>
+<h2 id="8-3-标题标签"><a href="#8-3-标题标签" class="headerlink" title="8.3 标题标签"></a>8.3 标题标签</h2><p> 标题标签是从<strong>h1</strong>到<strong>h6</strong>。</p>
+<ul>
+<li><strong>h1 - h6</strong>  都是标题标签</li>
+<li>h1 最大，h6最小</li>
+<li><strong>align</strong> 属性是对齐属性<ul>
+<li><strong>left</strong>     左对齐（默认）</li>
+<li><strong>right</strong>        右对齐</li>
+<li><strong>center</strong>     居中</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;h1 align=&quot;left&quot;&gt;标题 1&lt;/h1&gt;</span><br><span class="line">	&lt;h2 align=&quot;center&quot;&gt;标题 2&lt;/h2&gt;</span><br><span class="line">	&lt;h3 align=&quot;right&quot;&gt;标题 3&lt;/h3&gt;</span><br><span class="line">	&lt;h4&gt;标题 4&lt;/h4&gt;</span><br><span class="line">	&lt;h5&gt;标题 5&lt;/h5&gt;</span><br><span class="line">	&lt;h6&gt;标题 6&lt;/h6&gt;</span><br><span class="line">	&lt;h7&gt;标题 7&lt;/h7&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-4-超链接"><a href="#8-4-超链接" class="headerlink" title="8.4 超链接"></a>8.4 超链接</h2><p> <strong>a</strong> 标签是超链接</p>
+<ul>
+<li><p><strong>herf</strong>    属性设置连接的地址</p>
+</li>
+<li><p><strong>target</strong>   属性设置该链接的跳转方式</p>
+<blockquote>
+<p><strong>_self</strong>  表示当前页面打开<br><strong>_blank</strong>   表示打开新页面来进行跳转</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;a href=&quot;http://localhost:8080&quot;&gt;百度&lt;/a&gt;&lt;br/&gt;</span><br><span class="line">	&lt;a href=&quot;http://localhost:8080&quot; target=&quot;_self&quot;&gt;百度_self&lt;/a&gt;&lt;br/&gt;</span><br><span class="line">	&lt;a href=&quot;http://localhost:8080&quot; target=&quot;_blank&quot;&gt;百度_blank&lt;/a&gt;&lt;br/&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="8-5-列表标签"><a href="#8-5-列表标签" class="headerlink" title="8.5 列表标签"></a>8.5 列表标签</h2><p>  <strong>ul</strong>  是无序列表</p>
+<p>  <strong>ol</strong>   是有序列表</p>
+<p>​          <strong>type</strong> 属性可以修改列表项前面的符号</p>
+<p>  <strong>li</strong>   是列表项</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;ul&gt;</span><br><span class="line">		&lt;li&gt;赵四&lt;/li&gt;</span><br><span class="line">		&lt;li&gt;刘能&lt;/li&gt;</span><br><span class="line">		&lt;li&gt;宋小宝&lt;/li&gt;</span><br><span class="line">		&lt;li&gt;小沈阳&lt;/li&gt;</span><br><span class="line">	&lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="8-6-img标签"><a href="#8-6-img标签" class="headerlink" title="8.6 img标签"></a>8.6 img标签</h2><p>​    <strong>img</strong>   是图片标签，用来显示图片</p>
+<blockquote>
+<p>src   属性可以设置图片的路径</p>
+<p>width   属性可以设置图片的宽度</p>
+<p>height   属性可以设置图片的高度</p>
+<p>border    属性可以设置图片的边框大小</p>
+<p>alt    属性设置当指定路径找不到图片时，用于替代的文本</p>
+</blockquote>
+<p>在 web 中路径分为<u>相对路径</u>和<u>绝对路径</u>两种</p>
+<p><strong>相对路径</strong>:</p>
+<blockquote>
+<p><strong>.</strong>    ： 表示当前文件所在的目录</p>
+</blockquote>
+<blockquote>
+<p>**.. **    ：表示当前文件所在的上一级目录 </p>
+</blockquote>
+<blockquote>
+<p><strong>文件名</strong>  ： 表示当前文件所在目录的文件,相当于 ./ 文件名   ./ 可以省略 </p>
+</blockquote>
+<p><strong>绝对路径</strong>   : 正确格式是: <code>http://ip:port/工程名/资源路径</code></p>
 
       
 
